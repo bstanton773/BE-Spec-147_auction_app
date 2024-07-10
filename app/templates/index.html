@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Coding Temple Auction</title>
+        <!-- Boostrap CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    </head>
+    <body class="bg-primary-subtle">
+        <div class="container">
+            <h1 class="text-center mb-4">Auction Bidding</h1>
+            <div class="card my-3">
+                <div class="card-header">
+                    Auction Timer
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Time Remaining</h5>
+                    <p class="card-text" id="auctionTimer">Auction ends in: <span id="timeRemaining"></span></p>
+                </div>
+            </div>
+            <div class="card my-3">
+                <div class="card-header">
+                    Current Bid
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Highest Bid</h5>
+                    <p class="card-text">Current highest bid: <span id="bidAmount">0</span> by <span id="bidderName">No bids yet</span></p>
+                </div>
+            </div>
+            <div class="card my-3">
+                <div class="card-header">
+                    Place Your Bid
+                </div>
+                <div class="card-body">
+                    <form id="bidForm" class="row g-3">
+                        <div class="col-md-6">
+                            <input type="text" id="bidder" class="form-control" placeholder="Your Name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="number" id="amount" class="form-control" placeholder="Your Bid" required>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Place Bid</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card my-3">
+                <div class="card-header">
+                    Bid History
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Previous Bids</h5>
+                    <ul id="historyList" class="list-group">
+                        <!-- Bid history will be appended here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Our own JS -->
+        <script src="{{ url_for('static', filename='main.js') }}"></script>
+    </body>
+</html>
