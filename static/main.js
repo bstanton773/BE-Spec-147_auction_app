@@ -39,6 +39,24 @@ socket.on('bid_history', (historyArr) => {
     })
 })
 
+// Socket listener to accept the time remaining on the auction
+socket.on('auction_timer', (timeRemaining) => {
+    const timer = document.getElementById('timeRemaining')
+    timeRemaining = Math.floor(timeRemaining)
+    const interval = setInterval(()=>{
+        timeRemaining--;
+        if (timeRemaining <=0){
+            clearInterval(interval)
+            timer.className = 'text-danger'
+            timer.innerText = 'Auction has ended'
+        } else {
+            const minutes = Math.floor(timeRemaining / 60)
+            const seconds = timeRemaining % 60
+            timer.innerText = `${minutes}m ${seconds}s`
+        }
+    }, 1000)
+})
+
 
 // Grab the bid form and add event listener
 const bidForm = document.getElementById('bidForm');

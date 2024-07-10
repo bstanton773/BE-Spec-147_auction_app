@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
+import time
 
 
 app = Flask(__name__)
@@ -10,6 +11,9 @@ socketio = SocketIO(app)
 # Data for the app
 current_bid = {'amount': 0, 'bidder': 'No bids yet'}
 bid_history = []
+# Auction duration in seconds
+auction_duration = 5 * 60 # (5 minutes)
+auction_end_time = time.time() + auction_duration
 
 
 @app.route('/')
@@ -22,6 +26,8 @@ def handle_connect():
     print('Client has connected')
     emit('current_bid', current_bid)
     emit('bid_history', bid_history)
+    time_remaining = auction_end_time - time.time()
+    emit('auction_timer', time_remaining)
 
 @socketio.on('disconnect')
 def handle_disconnect():
@@ -30,6 +36,10 @@ def handle_disconnect():
 # listener for accepting a new bid
 @socketio.on('new_bid')
 def handle_new_bid(new_bid_data):
+    if time.time() > auction_end_time:
+        emit('rejection', {'reason': 'This auction has ended. No more bids allowed'})
+        return
+
     print('Accepting new bid:', new_bid_data)
     bid_amount = new_bid_data.get('amount', 0)
     bidder_name = new_bid_data.get('bidder', 'Anonymous')
