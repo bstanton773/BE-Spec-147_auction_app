@@ -7,6 +7,9 @@ app.config['SECRET_KEY'] = 'super-secret-key'
 
 socketio = SocketIO(app)
 
+# Data for the app
+current_bid = {'amount': 0, 'bidder': 'No bids yet'}
+
 
 @app.route('/')
 def index():
@@ -16,7 +19,7 @@ def index():
 @socketio.on('connect')
 def handle_connect():
     print('Client has connected')
-    socketio.emit('custom_test_event', {'message': 'I am ready for lunch'})
+    socketio.emit('current_bid', current_bid)
 
 @socketio.on('disconnect')
 def handle_disconnect():
