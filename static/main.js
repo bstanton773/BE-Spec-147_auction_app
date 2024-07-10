@@ -15,9 +15,14 @@ socket.on('current_bid', (currentBidData) => {
     // Grab the bidAmount and bidderName span elements by Id and update their innerText
     console.log('New bid coming in:', currentBidData);
     let bidAmountSpan = document.getElementById('bidAmount');
-    bidAmountSpan.innerText = currentBidData.amount;
+    bidAmountSpan.innerText = currentBidData.amount.toLocaleString();
     let bidderNameSpan = document.getElementById('bidderName');
     bidderNameSpan.innerText = currentBidData.bidder;
+})
+
+// Socket listener to handle errors from the server
+socket.on('rejection', (rejectionData) => {
+    alert(rejectionData.reason)
 })
 
 

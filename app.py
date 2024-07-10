@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 
 
 app = Flask(__name__)
@@ -19,7 +19,7 @@ def index():
 @socketio.on('connect')
 def handle_connect():
     print('Client has connected')
-    socketio.emit('current_bid', current_bid)
+    emit('current_bid', current_bid)
 
 @socketio.on('disconnect')
 def handle_disconnect():
@@ -35,9 +35,9 @@ def handle_new_bid(new_bid_data):
         current_bid['amount'] = bid_amount
         current_bid['bidder'] = bidder_name
         print('Successful bid, sending new bid out:', current_bid)
-        socketio.emit('current_bid', current_bid, broadcast=True)
+        emit('current_bid', current_bid, broadcast=True)
     else:
-        print('Bid was too low!')
+        emit('rejection', {'reason': f'Your bid (${bid_amount}) must be greater than the current bid (${current_bid["amount"]})'})
 
 
 if __name__ == "__main__":
