@@ -1,6 +1,6 @@
-console.log('Hello from the main.js file')
+console.log('Hello from the main.js file');
 
-const socket = io() // When the 'connect' event happens
+const socket = io(); // When the 'connect' event happens
 
 // console.log(socket)
 
@@ -13,8 +13,26 @@ const socket = io() // When the 'connect' event happens
 socket.on('current_bid', (currentBidData) => {
     // console.log(currentBidData)
     // Grab the bidAmount and bidderName span elements by Id and update their innerText
-    let bidAmountSpan = document.getElementById('bidAmount')
-    bidAmountSpan.innerText = currentBidData.amount
-    let bidderNameSpan = document.getElementById('bidderName')
-    bidderNameSpan.innerText = currentBidData.bidder
+    console.log('New bid coming in:', currentBidData);
+    let bidAmountSpan = document.getElementById('bidAmount');
+    bidAmountSpan.innerText = currentBidData.amount;
+    let bidderNameSpan = document.getElementById('bidderName');
+    bidderNameSpan.innerText = currentBidData.bidder;
+})
+
+
+// Grab the bid form and add event listener
+const bidForm = document.getElementById('bidForm');
+bidForm.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    // Get the data from the form inputs
+    let bidder = document.getElementById('bidder').value;
+    let amount = parseFloat(document.getElementById('amount').value);
+    // Send the new bid to the server
+    let newBidData = { bidder, amount };
+    socket.emit('new_bid', newBidData);
+
+    // Clear the input value data
+    document.getElementById('bidder').value = '';
+    document.getElementById('amount').value = '';
 })
