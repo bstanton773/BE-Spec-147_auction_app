@@ -9,6 +9,7 @@ socketio = SocketIO(app)
 
 # Data for the app
 current_bid = {'amount': 0, 'bidder': 'No bids yet'}
+bid_history = []
 
 
 @app.route('/')
@@ -20,6 +21,7 @@ def index():
 def handle_connect():
     print('Client has connected')
     emit('current_bid', current_bid)
+    emit('bid_history', bid_history)
 
 @socketio.on('disconnect')
 def handle_disconnect():
@@ -34,8 +36,11 @@ def handle_new_bid(new_bid_data):
     if bid_amount > current_bid['amount']:
         current_bid['amount'] = bid_amount
         current_bid['bidder'] = bidder_name
+        bid_history.append(current_bid.copy())
+        print(bid_history)
         print('Successful bid, sending new bid out:', current_bid)
         emit('current_bid', current_bid, broadcast=True)
+        emit('bid_history', bid_history, broadcast=True)
     else:
         emit('rejection', {'reason': f'Your bid (${bid_amount}) must be greater than the current bid (${current_bid["amount"]})'})
 

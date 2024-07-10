@@ -25,6 +25,20 @@ socket.on('rejection', (rejectionData) => {
     alert(rejectionData.reason)
 })
 
+// Socket listener to accept the bid history list
+socket.on('bid_history', (historyArr) => {
+    const historyListElement = document.getElementById('historyList');
+    // Clear out the current element
+    historyListElement.innerHTML = '';
+    // create a list element for each bid in the historyArr
+    historyArr.forEach( (bid) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item'
+        listItem.innerText = `Bid: $${bid.amount} by ${bid.bidder}`
+        historyListElement.appendChild(listItem)
+    })
+})
+
 
 // Grab the bid form and add event listener
 const bidForm = document.getElementById('bidForm');
