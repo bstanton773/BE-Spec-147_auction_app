@@ -16,6 +16,7 @@ def index():
 @socketio.on('connect')
 def handle_connect():
     print('Client has connected')
+    socketio.emit('custom_test_event', {'message': 'I am ready for lunch'})
 
 @socketio.on('disconnect')
 def handle_disconnect():
