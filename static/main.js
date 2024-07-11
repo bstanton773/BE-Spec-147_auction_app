@@ -1,6 +1,7 @@
 console.log('Hello from the main.js file');
 
 const socket = io(); // When the 'connect' event happens
+let auctionEnded = false;
 
 // console.log(socket)
 
@@ -44,11 +45,16 @@ socket.on('auction_timer', (timeRemaining) => {
     const timer = document.getElementById('timeRemaining')
     timeRemaining = Math.floor(timeRemaining)
     const interval = setInterval(()=>{
+        if (auctionEnded){
+            clearInterval(interval)
+            return
+        }
         timeRemaining--;
         if (timeRemaining <=0){
             clearInterval(interval)
             timer.className = 'text-danger'
             timer.innerText = 'Auction has ended'
+            socket.emit('auction_ended')
         } else {
             const minutes = Math.floor(timeRemaining / 60)
             const seconds = timeRemaining % 60
@@ -57,6 +63,11 @@ socket.on('auction_timer', (timeRemaining) => {
     }, 1000)
 })
 
+// Socket listener for auction winner
+socket.on('auction_winner', (winningBid) => {
+    auctionEnded = true;
+    alert(`Congratulation to ${winningBid.bidder} for winning with a bid of $${winningBid.amount}`)
+})
 
 // Grab the bid form and add event listener
 const bidForm = document.getElementById('bidForm');

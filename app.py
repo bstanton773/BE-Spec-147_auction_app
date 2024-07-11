@@ -54,6 +54,20 @@ def handle_new_bid(new_bid_data):
     else:
         emit('rejection', {'reason': f'Your bid (${bid_amount}) must be greater than the current bid (${current_bid["amount"]})'})
 
+@socketio.on('auction_ended')
+def handle_auction_ending():
+    emit('auction_winner', current_bid, broadcast=True)
+    # current_bid['amount'] = 0
+    # current_bid['bidder'] = 'No bids yet'
+    # bid_history.clear()
+    # global auction_end_time
+    # auction_end_time = time.time() + auction_duration
+    # emit('current_bid', current_bid, broadcast=True)
+    # emit('bid_history', bid_history, broadcast=True)
+    # time_remaining = auction_end_time - time.time()
+    # emit('auction_timer', time_remaining, broadcast=True)
+
+
 
 if __name__ == "__main__":
     # app.run(debug=True, port=5001)
